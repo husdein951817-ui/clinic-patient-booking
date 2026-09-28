@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#083d86">
+  <meta name="description" content="الحجز الإلكتروني لمواعيد عيادة جراحة العظام">
+  <title>حجز موعد | عيادة جراحة العظام</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="logo-link" href="#">
+        <img src="assets/clinic-logo.png" alt="شعار الطبيب والعيادة">
+      </a>
+      <nav>
+        <a class="active" href="#">الرئيسية</a>
+        <a href="#booking">حجز موعد</a>
+        <a href="#clinic-info">معلومات العيادة</a>
+        <a href="#contact">تواصل معنا</a>
+      </nav>
+      <a class="mobile-book" href="#booking">حجز موعد</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <span class="hero-kicker">رعاية متخصصة لجراحة العظام</span>
+        <h1>صحتك، حركتك<br><strong>وحياتك الأفضل</strong></h1>
+        <p>رعاية طبية متخصصة لآلام العظام والمفاصل، مع حجز إلكتروني سهل من الهاتف والكمبيوتر.</p>
+        <div class="hero-points">
+          <span><b>✓</b> حجز سريع وسهل</span>
+          <span><b>✓</b> مواعيد دقيقة</span>
+          <span><b>✓</b> خدمة مريحة للجميع</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="page">
+    <div class="booking-layout">
+      <section class="booking-card" id="booking">
+        <div class="card-title">
+          <div class="title-icon">📅</div>
+          <div>
+            <h2>احجز موعدك الآن</h2>
+            <p>خطوات بسيطة لحجز موعدك</p>
+          </div>
+        </div>
+
+        <div class="stepper">
+          <div class="step active" data-step-indicator="1"><span>1</span><b>التاريخ والوقت</b></div>
+          <i></i>
+          <div class="step" data-step-indicator="2"><span>2</span><b>معلوماتك</b></div>
+          <i></i>
+          <div class="step" data-step-indicator="3"><span>3</span><b>تأكيد الحجز</b></div>
+        </div>
+
+        <div id="notice" class="notice hidden"></div>
+
+        <form id="bookingForm" novalidate>
+          <section class="step-panel" data-step="1">
+            <div class="section-heading"><span>▣</span><div><h3>اختر التاريخ</h3><p>اختر اليوم المناسب لك</p></div></div>
+
+            <div class="date-nav">
+              <button type="button" id="prevDates" aria-label="أيام سابقة">‹</button>
+              <div id="dateStrip" class="date-strip"></div>
+              <button type="button" id="nextDates" aria-label="أيام لاحقة">›</button>
+            </div>
+
+            <div class="selected-date" id="selectedDateText">اختر يومًا لعرض الأوقات</div>
+
+            <div class="section-heading time-heading"><span>◷</span><div><h3>اختر الوقت المتاح</h3><p>الأوقات المتاحة للحجز فقط</p></div></div>
+            <div id="slots" class="slots"><div class="empty-state">جاري تحميل الأوقات المتاحة...</div></div>
+
+            <div class="schedule-note" id="workNote">الأوقات المتاحة تتحدث تلقائيًا حسب جدول العيادة والحجوزات.</div>
+            <button type="button" class="next-btn" id="toStep2" disabled>التالي <span>‹</span></button>
+          </section>
+
+          <section class="step-panel hidden" data-step="2">
+            <div class="section-heading"><span>●</span><div><h3>معلوماتك</h3><p>المعلومات الأساسية لإتمام الحجز</p></div></div>
+            <div class="form-grid">
+              <label class="field full"><span>الاسم الكامل <em>*</em></span><input id="fullName" type="text" autocomplete="name" maxlength="120" placeholder="اكتب الاسم الكامل" required></label>
+              <label class="field"><span>رقم الهاتف <small>(اختياري)</small></span><input id="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" placeholder="07xxxxxxxxx"></label>
+              <label class="field"><span>العمر <small>(اختياري)</small></span><input id="age" type="number" inputmode="numeric" min="0" max="120" placeholder="مثال: 35"></label>
+              <label class="field"><span>الجنس <small>(اختياري)</small></span><select id="gender"><option value="">اختر إن رغبت</option><option value="male">ذكر</option><option value="female">أنثى</option></select></label>
+              <label class="field full"><span>ملاحظات <small>(اختياري)</small></span><textarea id="notes" rows="3" maxlength="500" placeholder="أي ملاحظة ترغب بإبلاغ العيادة بها"></textarea></label>
+            </div>
+            <div class="privacy">🔒 <span><b>خصوصيتك محفوظة</b><small>تستخدم البيانات لإدارة موعدك داخل العيادة.</small></span></div>
+            <div class="actions"><button type="button" class="back-btn" id="backToStep1">رجوع</button><button type="button" class="next-btn" id="toStep3">متابعة</button></div>
+          </section>
+
+          <section class="step-panel hidden" data-step="3">
+            <div class="section-heading"><span>✓</span><div><h3>تأكيد الحجز</h3><p>راجع بيانات الموعد قبل التأكيد</p></div></div>
+            <div class="summary">
+              <div><span>المريض</span><b id="summaryName">—</b></div>
+              <div><span>التاريخ</span><b id="summaryDate">—</b></div>
+              <div><span>الوقت</span><b id="summaryTime">—</b></div>
+              <div><span>رقم الهاتف</span><b id="summaryPhone">غير مضاف</b></div>
+            </div>
+            <div class="confirm-note">بعد التأكيد سيصل الموعد مباشرة إلى نظام الاستقبال في العيادة.</div>
+            <div class="actions"><button type="button" class="back-btn" id="backToStep2">رجوع</button><button type="submit" class="next-btn" id="submitBtn">تأكيد الحجز <span>✓</span></button></div>
+          </section>
+        </form>
+      </section>
+
+      <aside class="clinic-card" id="clinic-info">
+        <div class="clinic-photo"><div class="clinic-photo-overlay">عيادة جراحة العظام</div></div>
+        <h2>معلومات العيادة</h2>
+        <div class="doctor-mini">
+          <img src="assets/clinic-logo.png" alt="">
+          <div><b>عيادة جراحة العظام</b><small>رعاية متخصصة لصحة العظام والمفاصل</small></div>
+        </div>
+        <div class="hours">
+          <div><span class="clock">◷</span><b>السبت - الثلاثاء</b><small>4:00 م – 8:00 م</small></div>
+          <div class="off"><span>⊖</span><b>الأربعاء</b><small>عطلة</small></div>
+          <div><span class="clock">◷</span><b>الخميس</b><small>4:00 م – 8:00 م</small></div>
+          <div><span class="clock">◷</span><b>الجمعة</b><small>9:00 ص – 1:00 ظهرًا</small></div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="features">
+      <div><span>♡</span><b>خدمة للجميع</b><small>بسهولة وبدون حساب</small></div>
+      <div><span>◷</span><b>أوقات واضحة</b><small>عرض الأوقات المتاحة فقط</small></div>
+      <div><span>♢</span><b>مواعيد مؤكدة</b><small>تأكيد فوري بعد الحجز</small></div>
+      <div id="contact"><span>⌕</span><b>تواصل معنا</b><small>نحن هنا لمساعدتك</small></div>
+    </section>
+  </main>
+
+  <div class="modal hidden" id="successModal">
+    <div class="success-card">
+      <div class="success-icon">✓</div><span class="hero-kicker dark">تم الحجز بنجاح</span>
+      <h2>موعدك مؤكد</h2>
+      <p>أهلًا <b id="successName">—</b>، تم تسجيل موعدك بنجاح.</p>
+      <div class="confirmation">
+        <div><span>التاريخ</span><b id="successDate">—</b></div>
+        <div><span>الوقت</span><b id="successTime">—</b></div>
+        <div><span>رقم المريض</span><b id="successPatientNo">—</b></div>
+        <div><span>رقم الحجز</span><b id="successAppointment">—</b></div>
+      </div>
+      <button class="next-btn" id="newBooking">حجز موعد آخر</button>
+      <button class="text-btn" id="closeSuccess">إغلاق</button>
+    </div>
+  </div>
+
+  <footer>
+    <img src="assets/clinic-logo.png" alt="">
+    <span>الحجز الإلكتروني لمواعيد العيادة</span>
+  </footer>
+  <script src="js/app.js"></script>
+</body>
+</html>
